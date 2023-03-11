@@ -1,0 +1,22 @@
+#schema
+
+schema: "https://api-mumbai.lens.dev"
+
+#documents
+
+documents: "src/graphql/*.graphql"
+
+#plugins
+generates:
+  src/graphql/generated.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-query
+      - fragment-matcher
+    config:
+      dedupeFragments: true
+      fetcher:
+        # function to be run separated by #
+        func: "./authorization-fetch#fetcher"
+        isReactHook: false
