@@ -1,5 +1,5 @@
 import { useAuthenticateMutation } from "@/graphql/generated";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAddress, useSDK } from "@thirdweb-dev/react";
 import generateChallenge from "./generateChallenge";
 import { setAccessToken } from "./helpers";
@@ -9,7 +9,9 @@ export default function useLogin(){
     const address =useAddress();
     const sdk = useSDK();
 
-    const {mutateAsync: sendSignedMessage} = useAuthenticateMutation()
+    const {mutateAsync: sendSignedMessage} = useAuthenticateMutation();
+
+    const client = useQueryClient();
 
     async function  login() {
         // if the wallet is not connected 
@@ -35,6 +37,9 @@ export default function useLogin(){
         const {accessToken, refreshToken} = authenticate;
 
         setAccessToken(accessToken, refreshToken);
+
+        //refetch the cache key
+        client.invalidateQueries(["lens-user",address])
 
 
     }
