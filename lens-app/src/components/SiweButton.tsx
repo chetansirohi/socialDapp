@@ -1,3 +1,5 @@
+import useLensUser from "@/lib/auth/useLensUser";
+import useLogin from "@/lib/auth/useLogin";
 import {
   ChainId,
   ConnectWallet,
@@ -17,6 +19,9 @@ export default function SiweButton({}: Props) {
   //Function to switch the network
   const [, switchNetwork] = useNetwork();
 
+  const { isSignedInQuery, profileQuery } = useLensUser();
+  const { mutate: requestLogin } = useLogin();
+
   //   Connect wallet
   if (!address) {
     return <ConnectWallet />;
@@ -30,4 +35,29 @@ export default function SiweButton({}: Props) {
   }
 
   //   Sign in with Lens
+
+  // Loading signed state
+  if (isSignedInQuery.isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  // If the user is not signed in, we need to request a login
+  if (!isSignedInQuery.data) {
+    return <button onClick={() => requestLogin()}>Sign in with Lens</button>;
+  }
+
+  // Loading profile information
+  if (profileQuery.isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  // If loading complete and no  default profile
+  if (!profileQuery.data?.defaultProfile) {
+    return <div>No Lens Profile</div>;
+  }
+
+  // If loading complete and there is a default profile
+  if (profileQuery.data?.defaultProfile) {
+    return <div>Welcome {profileQuery.data?.defaultProfile.handle}!</div>;
+  }
 }
