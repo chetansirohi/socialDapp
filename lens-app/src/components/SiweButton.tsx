@@ -3,6 +3,7 @@ import useLogin from "@/lib/auth/useLogin";
 import {
   ChainId,
   ConnectWallet,
+  MediaRenderer,
   useAddress,
   useNetwork,
   useNetworkMismatch,
@@ -58,6 +59,14 @@ export default function SiweButton({}: Props) {
 
   // If loading complete and there is a default profile
   if (profileQuery.data?.defaultProfile) {
-    return <div>Welcome {profileQuery.data?.defaultProfile.handle}!</div>;
+    return (
+      <div>
+        <MediaRenderer
+          src={profileQuery.data.defaultProfile.picture.original.url || ""}
+          alt={profileQuery.data.defaultProfile.name}
+          style={{ width: 48, height: 48, borderRadius: "50%" }}
+        />
+      </div>
+    );
   }
 }

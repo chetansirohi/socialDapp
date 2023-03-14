@@ -5,7 +5,7 @@
   justify-content: center;
   padding: 1rem;
   margin: 1rem;
-  border-radius: 10px;
+  border-radius: 5px;
   box-shadow: 0 0 14px rgba(0, 0, 0, 0.02), 0 5px 5px rgba(0, 0, 0, 0.04);
 }
 
@@ -25,8 +25,8 @@
 }
 
 .profilePictureContainer {
-  width: 128px;
-  height: 128px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   object-fit: cover;
 }
