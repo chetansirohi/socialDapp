@@ -1,19 +1,45 @@
 import Head from "next/head";
 import Image from "next/image";
-
-import styles from "@/styles/Home.module.css";
+import FeedPost from "../components/FeedPost";
 import {
+  PublicationMainFocus,
   PublicationSortCriteria,
   useExplorePublicationsQuery,
-} from "@/graphql/generated";
-import { ConnectWallet, useAddress, useLogin } from "@thirdweb-dev/react";
+} from "../graphql/generated";
+import styles from "../styles/Home.module.css";
 
 export default function Home() {
-  const address = useAddress();
-  const { mutate: requestLogin } = useLogin();
+  const { isLoading, error, data } = useExplorePublicationsQuery(
+    {
+      request: {
+        sortCriteria: PublicationSortCriteria.Latest,
+      },
+    },
+    {
+      // Don't refetch until the user comes back
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    }
+  );
 
-  if (!address) {
-    return <ConnectWallet />;
+  console.log(data);
+
+  if (error) {
+    return <div className={styles.container}>Error...</div>;
   }
-  return <button onClick={() => requestLogin}>Login</button>;
+
+  if (isLoading) {
+    return <div className={styles.container}>Loading...</div>;
+  }
+
+  return (
+    <div className={styles.container}>
+      {/* Iterate over the array of items inside the data field  */}
+      <div className={styles.postsContainer}>
+        {data?.explorePublications.items.map((publication) => (
+          <FeedPost publication={publication} key={publication.id} />
+        ))}
+      </div>
+    </div>
+  );
 }
