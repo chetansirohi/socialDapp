@@ -20,6 +20,8 @@ export default function FeedPost({ publication }: Props) {
           src={publication?.profile?.picture?.original?.url || ""}
           alt={publication.profile.name || publication.profile.handle}
           className={styles.feedPostProfilePicture}
+          height={48}
+          width={48}
         />
 
         {/* Author profile Name */}
