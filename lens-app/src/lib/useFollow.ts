@@ -12,10 +12,10 @@ export function useFollow() {
   const { mutateAsync: loginUser } = useLogin();
 
   async function follow(userId: string) {
-    // 0. Login
+    // Login
     await loginUser();
 
-    // 1. Use the auto generated mutation called "usecreateFollowTypedData"
+    // Use the auto generated mutation called "usecreateFollowTypedData"
     // to get the typed data for the user to sign
     const typedData = await requestTypedData({
       request: {
@@ -31,7 +31,7 @@ export function useFollow() {
 
     if (!sdk) return;
 
-    // 2. Sign the typed data using the SDK
+    // Sign the typed data using the SDK
     const signature = await signTypedDataWithOmmittedTypename(
       sdk,
       domain,
@@ -41,7 +41,7 @@ export function useFollow() {
 
     const { v, r, s } = splitSignature(signature.signature);
 
-    //  3. Send the typed data to the smart contract to perform the
+    //   Send the typed data to the smart contract to perform the
     // write operation on the blockchain
     const lensHubContract = await sdk.getContractFromAbi(
       LENS_CONTRACT_ADDRESS,
